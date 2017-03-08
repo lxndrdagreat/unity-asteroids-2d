@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+[RequireComponent(typeof(HealthComponent))]
 public class AsteroidComponent : MonoBehaviour {
 
 	private Rigidbody2D m_RigidBody;
@@ -9,6 +10,7 @@ public class AsteroidComponent : MonoBehaviour {
 	private Vector2 m_ForceDirection;
 
 	private SpriteRenderer m_Renderer;
+	private HealthComponent m_HealthComponent;
 
 	private bool m_IsWrappingX = false;
 	private bool m_IsWrappingY = false;
@@ -21,6 +23,11 @@ public class AsteroidComponent : MonoBehaviour {
 		m_RigidBody.AddTorque (Random.Range(-5.0f, 5.0f));
 
 		m_Renderer = GetComponent<SpriteRenderer> ();
+		m_HealthComponent = GetComponent<HealthComponent> ();
+
+		m_HealthComponent.Died += () => {
+			Destroy(gameObject);
+		};
 	}
 
 	// Use this for initialization
