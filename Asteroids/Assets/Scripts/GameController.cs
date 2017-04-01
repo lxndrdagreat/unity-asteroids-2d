@@ -12,7 +12,7 @@ public class GameController : MonoBehaviour {
 	private bool m_GameActive = true;
 	public bool GameActive { get { return m_GameActive; } }
 
-	public GameObject AsteroidPrefab;
+	public GameObject[] AsteroidPrefabs;
 
 	void Awake() {
 		if (instance == null) {
@@ -36,13 +36,19 @@ public class GameController : MonoBehaviour {
 	}
 
 	void SpawnAsteroids() {
-		for (var i = 0; i < 5 + m_Level; ++i) {
-			var asteroid = (GameObject)Instantiate (AsteroidPrefab);
+		for (var i = 0; i < 5 + m_Level; ++i) {			
 			var center = Camera.main.rect.center;
-
 			float angle = Random.Range (0.0f, 360.0f);
 			var offset = new Vector2 (Mathf.Sin (angle), Mathf.Cos (angle)) * 5.0f;
-			asteroid.transform.position = center + offset;
+			SpawnAsteroid (0, center + offset);
 		}
+	}
+
+	public void SpawnAsteroid(int size, Vector2 position, int count = 1){
+		if (size >= AsteroidPrefabs.Length) {
+			return;
+		}
+		var asteroid = (GameObject)Instantiate (AsteroidPrefabs[size]);
+		asteroid.transform.position = position;
 	}
 }

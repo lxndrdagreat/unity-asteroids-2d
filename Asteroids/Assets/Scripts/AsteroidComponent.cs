@@ -15,6 +15,9 @@ public class AsteroidComponent : MonoBehaviour {
 	private bool m_IsWrappingX = false;
 	private bool m_IsWrappingY = false;
 
+	[SerializeField]
+	private int m_AsteroidSize = 0;
+
 	void Awake() {
 		m_RigidBody = GetComponent<Rigidbody2D> ();
 
@@ -27,6 +30,7 @@ public class AsteroidComponent : MonoBehaviour {
 
 		m_HealthComponent.Died += () => {
 			Destroy(gameObject);
+			GameController.instance.SpawnAsteroid(m_AsteroidSize+1,transform.position, 2);
 		};
 	}
 
@@ -62,5 +66,11 @@ public class AsteroidComponent : MonoBehaviour {
 		}
 
 		transform.position = newPosition;
+	}
+
+	void OnCollisionEnter2D(Collision2D collision){
+//		if (collision.gameObject.tag != "Asteroid") {
+			m_HealthComponent.TakeDamage (1);
+//		}
 	}
 }
