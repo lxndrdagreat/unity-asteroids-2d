@@ -15,19 +15,13 @@ public class PlayerController : MonoBehaviour {
 
 	private bool m_Alive = true;
 
-	[Header("Weapon")]
-	public GameObject BulletPrefab;
-	[Tooltip("How often can you fire per second")]
-	public float RateOfFire = 5.0f;
-	private float _timeToFire = 0.0f;
-	private float _fireTimer = 0.0f;
+	[Header("Weapons")]	
+    public Weapon[] Weapons;
 
 	void Awake(){
 		m_RigidBody = GetComponent<Rigidbody2D> ();
 		m_Renderer = GetComponent<SpriteRenderer> ();
 		m_Collider = GetComponent<Collider2D> ();
-
-		_timeToFire = 1.0f / RateOfFire;
 	}
 
 	// Use this for initialization
@@ -54,22 +48,15 @@ public class PlayerController : MonoBehaviour {
 		var rotation = Quaternion.Euler (0, 0, angle);
 		transform.rotation = Quaternion.Slerp (transform.rotation, rotation, Time.deltaTime * m_RotationSpeed);
 
-		_fireTimer -= Time.deltaTime;
+        Weapons[0].Update();
 
-		if (Input.GetMouseButton (0) && _fireTimer <= 0.0f) {
-			Fire ();
+		if (Input.GetMouseButton (0)) {
+            Weapons[0].Fire(transform.position, transform.rotation);
 		}
 
 		if (Input.GetKey (KeyCode.Space)) {
 			m_RigidBody.AddForce (transform.right * Speed);
 		}
-	}
-
-	void Fire(){
-		_fireTimer = _timeToFire;
-		var bullet = (GameObject)Instantiate (BulletPrefab);
-		bullet.transform.position = transform.position;
-		bullet.GetComponent<BulletComponent> ().Init (transform.position, transform.rotation);
 	}
 
 	void OnTriggerEnter2D(Collider2D other){
