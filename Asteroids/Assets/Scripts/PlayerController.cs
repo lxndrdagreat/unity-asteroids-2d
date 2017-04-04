@@ -61,16 +61,6 @@ public class PlayerController : MonoBehaviour {
 		var bullet = (GameObject)Instantiate (BulletPrefab);
 		bullet.transform.position = transform.position;
 		bullet.GetComponent<BulletComponent> ().Init (transform.position, transform.rotation);
-//		RaycastHit2D hit = Physics2D.Raycast (transform.position, transform.right);
-//
-//		if (hit.collider && hit.collider.gameObject.tag == "Asteroid") {
-//			print ("Hit!");
-//			var asteroid = hit.collider.gameObject.GetComponent<AsteroidComponent> ();
-//			var healthComp = hit.collider.gameObject.GetComponent<HealthComponent> ();
-//			healthComp.TakeDamage (1);
-//		} else if (hit.collider) {
-//			print (hit.transform.gameObject.name);
-//		}
 	}
 
 	void OnTriggerEnter2D(Collider2D other){

@@ -7,6 +7,7 @@ public class BulletComponent : MonoBehaviour {
 	private LineRenderer _lineRenderer;
 
 	public float Lifetime = 0.1f;
+	public float Range = 10.0f;
 
 	void Awake() {
 		_lineRenderer = GetComponent<LineRenderer> ();
@@ -27,9 +28,21 @@ public class BulletComponent : MonoBehaviour {
 		_lineRenderer.SetPosition (0, position);
 
 		var center = position;
-		print (direction.eulerAngles.z);
-		float angle = direction.eulerAngles.z * (Mathf.PI / 180.0f);
-		var offset = new Vector2 (Mathf.Sin (angle), Mathf.Cos (angle));
+		float angleDegrees = (360.0f - direction.eulerAngles.z + 90.0f);
+		float angle = angleDegrees * (Mathf.PI / 180.0f);
+		var angleVector = new Vector2 (Mathf.Sin (angle), Mathf.Cos (angle));
+		var offset = angleVector * Range;
 		_lineRenderer.SetPosition (1, center + offset);
+
+		RaycastHit2D hit = Physics2D.Raycast (transform.position, angleVector, Range, 1 << 8);
+
+		if (hit.collider && hit.collider.gameObject.tag == "Asteroid") {
+			print ("Hit!");
+			var asteroid = hit.collider.gameObject.GetComponent<AsteroidComponent> ();
+			var healthComp = hit.collider.gameObject.GetComponent<HealthComponent> ();
+			healthComp.TakeDamage (1);
+		} else if (hit.collider) {
+			print (hit.transform.gameObject.name);
+		}
 	}
 }
