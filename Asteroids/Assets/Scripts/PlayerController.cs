@@ -15,6 +15,8 @@ public class PlayerController : MonoBehaviour {
 
 	private bool m_Alive = true;
 
+	public GameObject BulletPrefab;
+
 	void Awake(){
 		m_RigidBody = GetComponent<Rigidbody2D> ();
 		m_Renderer = GetComponent<SpriteRenderer> ();
@@ -56,20 +58,23 @@ public class PlayerController : MonoBehaviour {
 
 	void Fire(){
 		print ("Fire!");
-		RaycastHit2D hit = Physics2D.Raycast (transform.position, transform.right);
-
-		if (hit.collider && hit.collider.gameObject.tag == "Asteroid") {
-			print ("Hit!");
-			var asteroid = hit.collider.gameObject.GetComponent<AsteroidComponent> ();
-			var healthComp = hit.collider.gameObject.GetComponent<HealthComponent> ();
-			healthComp.TakeDamage (1);
-		} else if (hit.collider) {
-			print (hit.transform.gameObject.name);
-		}
+		var bullet = (GameObject)Instantiate (BulletPrefab);
+		bullet.transform.position = transform.position;
+		bullet.GetComponent<BulletComponent> ().Init (transform.position, transform.rotation);
+//		RaycastHit2D hit = Physics2D.Raycast (transform.position, transform.right);
+//
+//		if (hit.collider && hit.collider.gameObject.tag == "Asteroid") {
+//			print ("Hit!");
+//			var asteroid = hit.collider.gameObject.GetComponent<AsteroidComponent> ();
+//			var healthComp = hit.collider.gameObject.GetComponent<HealthComponent> ();
+//			healthComp.TakeDamage (1);
+//		} else if (hit.collider) {
+//			print (hit.transform.gameObject.name);
+//		}
 	}
 
 	void OnTriggerEnter2D(Collider2D other){
-		m_Alive = false;
-		m_RigidBody.velocity = new Vector2 ();
+//		m_Alive = false;
+//		m_RigidBody.velocity = new Vector2 ();
 	}
 }
