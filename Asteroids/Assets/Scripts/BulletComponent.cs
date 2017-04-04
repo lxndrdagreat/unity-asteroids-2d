@@ -37,7 +37,7 @@ public class BulletComponent : MonoBehaviour {
 		RaycastHit2D hit = Physics2D.Raycast (transform.position, angleVector, Range, 1 << 8);
 
 		if (hit.collider && hit.collider.gameObject.tag == "Asteroid") {
-			print ("Hit!");
+            GameController.instance.SpawnHitParticle(hit.point);
 			var asteroid = hit.collider.gameObject.GetComponent<AsteroidComponent> ();
 			var healthComp = hit.collider.gameObject.GetComponent<HealthComponent> ();
 			healthComp.TakeDamage (1);

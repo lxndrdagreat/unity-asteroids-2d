@@ -12,7 +12,10 @@ public class GameController : MonoBehaviour {
 	private bool m_GameActive = true;
 	public bool GameActive { get { return m_GameActive; } }
 
+    [Header("Asteroids")]
 	public GameObject[] AsteroidPrefabs;
+
+    public GameObject HitParticlePrefab;
 
 	void Awake() {
 		if (instance == null) {
@@ -51,4 +54,10 @@ public class GameController : MonoBehaviour {
 		var asteroid = (GameObject)Instantiate (AsteroidPrefabs[size]);
 		asteroid.transform.position = position;
 	}
+
+    public void SpawnHitParticle(Vector3 position)
+    {
+        var effect = (GameObject)Instantiate(HitParticlePrefab);
+        effect.transform.position = position;
+    }
 }
