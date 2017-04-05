@@ -12,10 +12,15 @@ public class GameController : MonoBehaviour {
 	private bool m_GameActive = true;
 	public bool GameActive { get { return m_GameActive; } }
 
+    public GameObject PlayerPrefab;
+    private GameObject _playerShip = null;
+
     [Header("Asteroids")]
 	public GameObject[] AsteroidPrefabs;
 
     public GameObject HitParticlePrefab;
+
+    private List<GameObject> _asteroids;
 
 	void Awake() {
 		if (instance == null) {
@@ -23,20 +28,40 @@ public class GameController : MonoBehaviour {
 		} else if (instance != this) {
 			Destroy (gameObject);
 			return;
-		}			
+		}
 
+        _asteroids = new List<GameObject>();
 		SpawnAsteroids ();
 	}
 
 	// Use this for initialization
 	void Start () {
-		
+        SpawnPlayer();
 	}
 	
 	// Update is called once per frame
 	void Update () {
 		
 	}
+
+    void SpawnPlayer()
+    {
+        if (_playerShip == null)
+        {
+            _playerShip = (GameObject)Instantiate(PlayerPrefab);            
+        }
+        _playerShip.SetActive(true);
+        _playerShip.transform.position = Vector2.zero;
+    }
+
+    void DespawnPlayer()
+    {
+        if (_playerShip == null)
+        {
+            return;
+        }
+        _playerShip.SetActive(false);
+    }
 
 	void SpawnAsteroids() {
 		for (var i = 0; i < 5 + m_Level; ++i) {			
@@ -53,7 +78,21 @@ public class GameController : MonoBehaviour {
 		}
 		var asteroid = (GameObject)Instantiate (AsteroidPrefabs[size]);
 		asteroid.transform.position = position;
+        _asteroids.Add(asteroid);
 	}
+
+    public void DestroyAsteroid(AsteroidComponent asteroid)
+    {
+        SpawnAsteroid(asteroid.GetAsteroidSize()+1, asteroid.transform.position, 2);
+        _asteroids.Remove(asteroid.gameObject);
+        Destroy(asteroid.gameObject);
+
+        if (_asteroids.Count == 0)
+        {
+            // finished the level
+
+        }
+    }
 
     public void SpawnHitParticle(Vector3 position)
     {

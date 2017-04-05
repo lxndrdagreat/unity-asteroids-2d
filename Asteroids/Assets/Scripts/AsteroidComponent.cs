@@ -17,6 +17,10 @@ public class AsteroidComponent : MonoBehaviour {
 
 	[SerializeField]
 	private int m_AsteroidSize = 0;
+    public int GetAsteroidSize()
+    {
+        return m_AsteroidSize;
+    }
 
 	void Awake() {
 		m_RigidBody = GetComponent<Rigidbody2D> ();
@@ -29,9 +33,8 @@ public class AsteroidComponent : MonoBehaviour {
 		m_HealthComponent = GetComponent<HealthComponent> ();
 
 		m_HealthComponent.Died += () => {
-			Destroy(gameObject);
-			GameController.instance.SpawnAsteroid(m_AsteroidSize+1,transform.position, 2);
-		};
+            GameController.instance.DestroyAsteroid(this);
+        };
 	}
 
 	// Use this for initialization

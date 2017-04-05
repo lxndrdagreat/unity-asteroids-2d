@@ -14,8 +14,10 @@ public class PlayerController : MonoBehaviour {
 	private Collider2D m_Collider;
 
 	private bool m_Alive = true;
+    private bool m_IsWrappingX = false;
+    private bool m_IsWrappingY = false;
 
-	[Header("Weapons")]	
+    [Header("Weapons")]	
     public Weapon[] Weapons;
 
 	void Awake(){
@@ -47,6 +49,36 @@ public class PlayerController : MonoBehaviour {
 
 		var rotation = Quaternion.Euler (0, 0, angle);
 		transform.rotation = Quaternion.Slerp (transform.rotation, rotation, Time.deltaTime * m_RotationSpeed);
+
+        var viewportPosition = Camera.main.WorldToViewportPoint(transform.position);
+
+        var newPosition = transform.position;
+
+        if (viewportPosition.x > 1 || viewportPosition.x < 0)
+        {
+            if (!m_IsWrappingX)
+            {
+                newPosition.x = -newPosition.x;
+                m_IsWrappingX = true;
+            }
+        }
+        else {
+            m_IsWrappingX = false;
+        }
+
+        if (viewportPosition.y > 1 || viewportPosition.y < 0)
+        {
+            if (!m_IsWrappingY)
+            {
+                newPosition.y = -newPosition.y;
+                m_IsWrappingY = true;
+            }
+        }
+        else {
+            m_IsWrappingY = false;
+        }
+
+        transform.position = newPosition;
 
         Weapons[0].Update();
 
