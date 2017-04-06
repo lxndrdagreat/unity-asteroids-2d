@@ -9,11 +9,11 @@
 
 - Better asteroid spawning.
 - Better asteroid screen looping.
-- Level advancement.
+- ~~Level advancement.~~
 - Player respawn.
 - Player lives.
 - Weapons
-  - Raycast bullet
+  - ~~Raycast bullet~~
   - Rockets
   - Bullets
 - Aliens
