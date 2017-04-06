@@ -15,6 +15,15 @@ public class GameController : MonoBehaviour {
     public GameObject PlayerPrefab;
     private GameObject _playerShip = null;
 
+    public GameObject WarpfieldPrefab;
+    private GameObject _warpField = null;
+
+    [SerializeField]
+    [Tooltip("How long to play Warpfield between levels.")]
+    private float _WarpTime = 1.0f;
+    private float _warpTimer = 0.0f;
+    private bool _warping = false;
+
     [Header("Asteroids")]
 	public GameObject[] AsteroidPrefabs;
 
@@ -31,7 +40,7 @@ public class GameController : MonoBehaviour {
 		}
 
         _asteroids = new List<GameObject>();
-		SpawnAsteroids ();
+		SpawnAsteroids ();        
 	}
 
 	// Use this for initialization
@@ -41,7 +50,17 @@ public class GameController : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		
+		if (_warping)
+        {
+            _warpTimer -= Time.deltaTime;
+            if (_warpTimer <= 0.0f)
+            {
+                _warping = false;
+                Destroy(_warpField);
+                SpawnAsteroids();
+                SpawnPlayer();                
+            }
+        }
 	}
 
     void SpawnPlayer()
@@ -90,7 +109,12 @@ public class GameController : MonoBehaviour {
         if (_asteroids.Count == 0)
         {
             // finished the level
-
+            print("Level complete. Starting next level.");
+            DespawnPlayer();
+            _warpField = (GameObject)Instantiate(WarpfieldPrefab);
+            _warpTimer = _WarpTime;
+            _warping = true;
+            m_Level += 1;
         }
     }
 
