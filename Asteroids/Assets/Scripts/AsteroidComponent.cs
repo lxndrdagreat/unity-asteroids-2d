@@ -40,8 +40,21 @@ public class AsteroidComponent : MonoBehaviour {
 
     public void Initialize(int size)
     {
-        var s = (float) (size + 1);
-        m_ForceDirection = new Vector2 (Random.Range (-1.0f*s, 1.0f*s), Random.Range (-1.0f*s, 1.0f*s));
+        var s = (float) size;
+        var x = Random.Range(s, 1.0f + s);
+        var y = Random.Range(s, 1.0f + s);
+        var which = Random.Range(0, 2);
+        if (which == 1)
+        {
+            x *= -1.0f;
+        }
+        which = Random.Range(0, 2);
+        if (which == 2)
+        {
+            y *= -1.0f;
+        }
+
+        m_ForceDirection = new Vector2 (x, y);
 
         m_RigidBody.velocity = m_ForceDirection;
 
