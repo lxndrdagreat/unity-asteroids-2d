@@ -17,3 +17,6 @@
   - Rockets
   - Bullets
 - Aliens
+
+# Known Issues
+- Asteroids sometimes go outside the camera and do not loop around to the other side.
