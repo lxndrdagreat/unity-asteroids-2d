@@ -25,10 +25,6 @@ public class AsteroidComponent : MonoBehaviour {
 	void Awake() {
 		m_RigidBody = GetComponent<Rigidbody2D> ();
 
-		m_ForceDirection = new Vector2 (Random.Range (-1.0f, 1.0f), Random.Range (-1.0f, 1.0f));
-
-		m_RigidBody.AddTorque (Random.Range(-5.0f, 5.0f));
-
 		m_Renderer = GetComponent<SpriteRenderer> ();
 		m_HealthComponent = GetComponent<HealthComponent> ();
 
@@ -41,6 +37,16 @@ public class AsteroidComponent : MonoBehaviour {
 	void Start () {
 		
 	}
+
+    public void Initialize(int size)
+    {
+        var s = (float) (size + 1);
+        m_ForceDirection = new Vector2 (Random.Range (-1.0f*s, 1.0f*s), Random.Range (-1.0f*s, 1.0f*s));
+
+        m_RigidBody.velocity = m_ForceDirection;
+
+        m_RigidBody.AddTorque (Random.Range(-5.0f, 5.0f));
+    }
 	
 	// Update is called once per frame
 	void Update () {
@@ -72,8 +78,9 @@ public class AsteroidComponent : MonoBehaviour {
 	}
 
 	void OnCollisionEnter2D(Collision2D collision){
-//		if (collision.gameObject.tag != "Asteroid") {
-			m_HealthComponent.TakeDamage (1);
-//		}
-	}
+        if (collision.gameObject.tag != "Asteroid")
+        {
+            m_HealthComponent.TakeDamage (1);
+        }
+    }
 }

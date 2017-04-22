@@ -86,7 +86,7 @@ public class GameController : MonoBehaviour {
 		for (var i = 0; i < 5 + m_Level; ++i) {			
 			var center = Camera.main.rect.center;
 			float angle = Random.Range (0.0f, 360.0f);
-			var offset = new Vector2 (Mathf.Sin (angle), Mathf.Cos (angle)) * 5.0f;
+			var offset = new Vector2 (Mathf.Sin (angle), Mathf.Cos (angle)) * 7.0f;
 			SpawnAsteroid (0, center + offset);
 		}
 	}
@@ -96,6 +96,7 @@ public class GameController : MonoBehaviour {
 			return;
 		}
 		var asteroid = (GameObject)Instantiate (AsteroidPrefabs[size]);
+	    asteroid.GetComponent<AsteroidComponent>().Initialize(size);
 		asteroid.transform.position = position;
         _asteroids.Add(asteroid);
 	}
