@@ -20,6 +20,8 @@ public class PlayerController : MonoBehaviour {
     [Header("Weapons")]	
     public Weapon[] Weapons;
 
+    [SerializeField] private int _CurrentWeapon = 0;
+
 	void Awake(){
 		m_RigidBody = GetComponent<Rigidbody2D> ();
 		m_Renderer = GetComponent<SpriteRenderer> ();
@@ -80,10 +82,10 @@ public class PlayerController : MonoBehaviour {
 
         transform.position = newPosition;
 
-        Weapons[0].Update();
+        Weapons[_CurrentWeapon].Update();
 
 		if (Input.GetMouseButton (0)) {
-            Weapons[0].Fire(transform.position, transform.rotation);
+            Weapons[_CurrentWeapon].Fire(transform.position, transform.rotation);
 		}
 
 		if (Input.GetKey (KeyCode.Space)) {
